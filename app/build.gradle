@@ -54,12 +54,13 @@ dependencies {
     // RxJava dependencies
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
-    implementation "io.reactivex:rxandroid:$rootProject.rx1androidVersion"
+
 
     // Retrofit dependencies
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitClientVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitAdapterRxJavaVersion"
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.gsonConverterVersion"
 
     // Room dependencies
