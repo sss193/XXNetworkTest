@@ -1,37 +1,36 @@
 package com.example.xxnetworktask.model.remotedatasource
 
 
-import com.example.xxnetworktask.common.AppConstant
 import com.example.xxnetworktask.model.datamodel.MovieDetailsDataModel
+import com.example.xxnetworktask.model.datamodel.MovieListDataModel
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
+class RemoteDataSource(private val movieTaskApi: MovieTaskApi) : IRemoteDataSource {
 
-class RemoteDataSource {
+    companion object {
+        const val API_KEY = "fd671a05e78db1a26837c3f4226776e3"
+        const val LANGUAGE_CODE = "en-US"
+    }
 
-    val okHttpClient = OkHttpClient().newBuilder()
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        })
-        .build()
+    override fun getMovieDetails(id: Int): Single<MovieDetailsDataModel> {
+        return movieTaskApi.getMovieDetails(id, API_KEY, LANGUAGE_CODE)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
-    val retrofit = Retrofit.Builder()
-        .client(okHttpClient)
-        .baseUrl(AppConstant.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .build()
+    override fun getMovieListBySearchQuery(
+        queryText: String,
+        page: Int
+    ): Single<MovieListDataModel> {
+        return movieTaskApi.getMovieListBySearchQuery(API_KEY, queryText, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
-    val movieTaskApi = retrofit.create(MovieTaskApi::class.java)
-
-    fun getMovieDetails(id: Int): Single<MovieDetailsDataModel> {
-        return movieTaskApi.getMovieDetails(id, AppConstant.API_KEY, AppConstant.LANGUAGE_CODE)
+    override fun getMovieListByGenre(genreId: Int, page: Int): Single<MovieListDataModel> {
+        return movieTaskApi.getMovieListByGenre(API_KEY, genreId, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
