@@ -3,7 +3,7 @@ package com.example.xxnetworktask.presentation.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.xxnetworktask.R
+import com.example.xxnetworktask.databinding.ActivityHomeBinding
 import com.example.xxnetworktask.di.DaggerMovieTaskComponent
 import com.example.xxnetworktask.di.NetworkModule
 import com.example.xxnetworktask.model.datamodel.MovieListDataModel
@@ -18,15 +18,18 @@ class HomeActivity : AppCompatActivity() {
     @Inject
     lateinit var homeViewModel: IHomeViewModel
 
+    private lateinit var viewBinding: ActivityHomeBinding
+
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/"
     }
 
-    val globalDisposable = CompositeDisposable()
+    private val globalDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home2)
+        viewBinding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
         initializeDagger()
 
