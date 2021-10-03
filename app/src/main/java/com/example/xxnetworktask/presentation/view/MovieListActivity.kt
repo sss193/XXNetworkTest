@@ -1,7 +1,6 @@
 package com.example.xxnetworktask.presentation.view
 
 import android.content.Intent
-import android.graphics.Movie
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.xxnetworktask.MovieTaskApp
 import com.example.xxnetworktask.databinding.ActivityMovieListBinding
 import com.example.xxnetworktask.di.MovieListModule
-import com.example.xxnetworktask.model.datamodel.MovieListDataModel
+import com.example.xxnetworktask.model.datamodel.MovieListResponse
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
 import com.example.xxnetworktask.presentation.viewmodel.IMovieListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -47,12 +46,12 @@ class MovieListActivity : AppCompatActivity() {
         MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieListModule()).inject(this)
     }
 
-    private fun populateUi(movieListDataModel: MovieListDataModel) {
+    private fun populateUi(movieListResponse: MovieListResponse) {
         //showContentLayout()
-        totalPage = movieListDataModel._totalPages
-        currentPage = movieListDataModel._page
+        totalPage = movieListResponse._totalPages
+        currentPage = movieListResponse._page
 
-        movieListAdapter.setMovieListResponse(movieListDataModel._movieList)
+        movieListAdapter.setMovieListResponse(movieListResponse._movieList)
     }
 
     private fun initRecyclerView() {
@@ -102,8 +101,8 @@ class MovieListActivity : AppCompatActivity() {
         movieListViewModel.getMovieListBySearchQuery("hero", currentPage)
             .doOnSubscribe { globalDisposable.add(it) }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<MovieListDataModel>() {
-                override fun onSuccess(t: MovieListDataModel) {
+            .subscribe(object : DisposableSingleObserver<MovieListResponse>() {
+                override fun onSuccess(t: MovieListResponse) {
                     loading = false
                     populateUi(t)
                     Log.e("sss", "onSuccess===>${t._movieList.size}")

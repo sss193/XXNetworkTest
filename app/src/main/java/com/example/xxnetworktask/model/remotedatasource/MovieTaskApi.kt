@@ -1,7 +1,7 @@
 package com.example.xxnetworktask.model.remotedatasource
 
-import com.example.xxnetworktask.model.datamodel.MovieDetailsDataModel
-import com.example.xxnetworktask.model.datamodel.MovieListDataModel
+import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
+import com.example.xxnetworktask.model.datamodel.MovieListResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,14 +14,14 @@ interface MovieTaskApi {
         @Path("id") id: Int,
         @Query(value = "api_key") api_key: String,
         @Query(value = "language") language: String
-    ): Single<MovieDetailsDataModel>
+    ): Single<MovieDetailsResponse>
 
     @GET("/3/search/movie")
     fun getMovieListBySearchQuery(
         @Query(value = "api_key") api_key: String,
         @Query(value = "query") query: String,
         @Query(value = "page") page: Int
-    ): Single<MovieListDataModel>
+    ): Single<MovieListResponse>
 
 
     @GET("/3/discover/movie")
@@ -29,5 +29,5 @@ interface MovieTaskApi {
         @Query(value = "api_key") api_key: String,
         @Query(value = "with_genres") genreId: Int,
         @Query(value = "page") page: Int
-    ): Single<MovieListDataModel>
+    ): Single<MovieListResponse>
 }

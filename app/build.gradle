@@ -73,6 +73,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     implementation "androidx.room:room-ktx:2.3.0"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    //implementation "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
 
     //Picasso
     implementation "com.squareup.picasso:picasso:$picassoVersion"

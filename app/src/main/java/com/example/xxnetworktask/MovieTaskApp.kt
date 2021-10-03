@@ -3,6 +3,7 @@ package com.example.xxnetworktask
 import android.app.Application
 import android.content.Context
 import com.example.xxnetworktask.di.DaggerMovieTaskComponent
+import com.example.xxnetworktask.di.LocalDbModule
 import com.example.xxnetworktask.di.MovieTaskComponent
 import com.example.xxnetworktask.di.NetworkModule
 
@@ -25,6 +26,7 @@ class MovieTaskApp : Application() {
     private fun initDaggerMovieTaskComponent() {
         movieTaskComponent = DaggerMovieTaskComponent.builder()
             .networkModule(NetworkModule(BASE_URL))
+            .localDbModule(LocalDbModule(this))
             .build()
 
         movieTaskComponent.inject(this)

@@ -1,7 +1,6 @@
 package com.example.xxnetworktask.di
 
 import com.example.xxnetworktask.presentation.view.MovieDetailsActivity
-import com.example.xxnetworktask.presentation.view.MovieListActivity
 import dagger.Subcomponent
 
 

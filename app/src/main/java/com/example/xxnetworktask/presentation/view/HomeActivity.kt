@@ -2,15 +2,9 @@ package com.example.xxnetworktask.presentation.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.example.xxnetworktask.databinding.ActivityHomeBinding
-import com.example.xxnetworktask.di.DaggerMovieTaskComponent
-import com.example.xxnetworktask.di.NetworkModule
-import com.example.xxnetworktask.model.datamodel.MovieListDataModel
 import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {

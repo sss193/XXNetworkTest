@@ -1,5 +1,8 @@
 package com.example.xxnetworktask.di
 
+import com.example.xxnetworktask.model.localdatasource.ILocalDataSource
+import com.example.xxnetworktask.model.localdatasource.LocalDataSource
+import com.example.xxnetworktask.model.localdatasource.MovieDAO
 import com.example.xxnetworktask.model.remotedatasource.IRemoteDataSource
 import com.example.xxnetworktask.model.remotedatasource.MovieTaskApi
 import com.example.xxnetworktask.model.remotedatasource.RemoteDataSource
@@ -9,17 +12,25 @@ import com.example.xxnetworktask.presentation.viewmodel.HomeViewModel
 import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
 import dagger.Module
 import dagger.Provides
+import java.util.concurrent.Executor
 
 
 @Module
 class MovieTaskModule {
 
     @Provides
-    fun providesMovieTaskRepository(remoteDataSource: IRemoteDataSource): IMovieTaskRepository =
-        MovieTaskRepository(remoteDataSource)
+    fun providesMovieTaskRepository(
+        remoteDataSource: IRemoteDataSource,
+        localDataSource: ILocalDataSource
+    ): IMovieTaskRepository =
+        MovieTaskRepository(remoteDataSource, localDataSource)
 
     @Provides
     fun providesRemoteDataSource(movieTaskApi: MovieTaskApi): IRemoteDataSource =
         RemoteDataSource(movieTaskApi)
+
+    @Provides
+    fun providesLocalDataSource(movieDAO: MovieDAO, exec: Executor): ILocalDataSource =
+        LocalDataSource(movieDAO, exec)
 
 }

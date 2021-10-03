@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.xxnetworktask.R
 import com.example.xxnetworktask.databinding.LayoutRowMovieListBinding
-import com.example.xxnetworktask.model.datamodel.MovieDetailsDataModel
+import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
 
 class MovieListAdapter(private val context: Context, private val onMovieClick: (Int) -> Unit) :
     RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>() {
@@ -16,7 +16,7 @@ class MovieListAdapter(private val context: Context, private val onMovieClick: (
         const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500/"
     }
 
-    private var movieList = mutableListOf<MovieDetailsDataModel>()
+    private var movieList = mutableListOf<MovieDetailsResponse>()
     private val layoutInflater = LayoutInflater.from(context)
 
     inner class MovieListViewHolder(val viewBinding: LayoutRowMovieListBinding) :
@@ -24,7 +24,7 @@ class MovieListAdapter(private val context: Context, private val onMovieClick: (
 
     }
 
-    fun setMovieListResponse(reponse: List<MovieDetailsDataModel>) {
+    fun setMovieListResponse(reponse: List<MovieDetailsResponse>) {
         movieList.addAll(reponse)
         notifyDataSetChanged()
     }

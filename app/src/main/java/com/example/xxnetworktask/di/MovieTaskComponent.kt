@@ -8,7 +8,7 @@ import dagger.Component
 
 
 
-@Component(modules = [NetworkModule::class, MovieTaskModule::class])
+@Component(modules = [NetworkModule::class, LocalDbModule::class, MovieTaskModule::class])
 interface MovieTaskComponent {
     fun inject(application: MovieTaskApp)
 

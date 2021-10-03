@@ -8,7 +8,8 @@ import com.example.xxnetworktask.MovieTaskApp
 import com.example.xxnetworktask.R
 import com.example.xxnetworktask.databinding.ActivityMovieDetailsBinding
 import com.example.xxnetworktask.di.MovieDetailsModule
-import com.example.xxnetworktask.model.datamodel.MovieDetailsDataModel
+import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
+import com.example.xxnetworktask.model.localdatasource.MovieEntity
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
 import com.example.xxnetworktask.presentation.viewmodel.IMovieDetailsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,8 +39,8 @@ class MovieDetailsActivity : AppCompatActivity() {
         movieDetailsViewModel.getMovieDetails(movieId)
             .doOnSubscribe { globalDisposable.add(it) }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<MovieDetailsDataModel>() {
-                override fun onSuccess(t: MovieDetailsDataModel) {
+            .subscribe(object : DisposableSingleObserver<MovieDetailsResponse>() {
+                override fun onSuccess(t: MovieDetailsResponse) {
                     populateUi(t)
                 }
 
@@ -51,18 +52,47 @@ class MovieDetailsActivity : AppCompatActivity() {
             )
     }
 
-    private fun populateUi(movieDetailsDataModel: MovieDetailsDataModel) {
+    private fun populateUi(movieDetailsResponse: MovieDetailsResponse) {
         viewBinding.apply {
-            tvMovieTitle.text = movieDetailsDataModel._title
-            tvMovieDes.text = movieDetailsDataModel._description
-            tvMovieRating.text = movieDetailsDataModel._rating.toString()
+            tvMovieTitle.text = movieDetailsResponse._title
+            tvMovieDes.text = movieDetailsResponse._description
+            tvMovieRating.text = movieDetailsResponse._rating.toString()
             Glide.with(this@MovieDetailsActivity)
-                .load(MovieListAdapter.POSTER_BASE_URL + movieDetailsDataModel._poster)
+                .load(MovieListAdapter.POSTER_BASE_URL + movieDetailsResponse._poster)
                 .placeholder(R.drawable.ic_load)
                 .error(R.drawable.ic_not_found)
                 .into(imgPoster)
+            imgWishList.setOnClickListener { addwishList(movieDetailsResponse) }
+            btnTest.setOnClickListener { testResult() }
         }
 
+    }
+
+    private fun testResult() {
+        movieDetailsViewModel.getMovieWishList()
+            .doOnSubscribe { globalDisposable.add(it) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableSingleObserver<List<MovieEntity>>() {
+                override fun onSuccess(t: List<MovieEntity>) {
+                    Log.e("sss", "onSuccess===> ${t.size}")
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e("sss", "onError===> $e")
+                }
+            }
+
+            )
+    }
+
+    private fun addwishList(movieDetailsResponse: MovieDetailsResponse) {
+        var movieEntity = MovieEntity().apply {
+            movieId = movieDetailsResponse._id
+            movieName = movieDetailsResponse._title
+            movieImage = movieDetailsResponse._poster
+        }
+        movieDetailsViewModel.insertMovie(movieEntity)
+        Log.e("sss", "movie Inserted===>")
     }
 
     override fun onDestroy() {

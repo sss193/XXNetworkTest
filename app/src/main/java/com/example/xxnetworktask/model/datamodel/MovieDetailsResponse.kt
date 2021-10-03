@@ -3,7 +3,7 @@ package com.example.xxnetworktask.model.datamodel
 import com.google.gson.annotations.SerializedName
 
 
-data class MovieDetailsDataModel(
+data class MovieDetailsResponse(
     @SerializedName("id")
     val _id: Int,
 
