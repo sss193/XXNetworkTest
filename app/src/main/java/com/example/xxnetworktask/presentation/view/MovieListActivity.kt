@@ -1,5 +1,7 @@
 package com.example.xxnetworktask.presentation.view
 
+import android.content.Intent
+import android.graphics.Movie
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,15 +9,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.xxnetworktask.MovieTaskApp
-
 import com.example.xxnetworktask.databinding.ActivityMovieListBinding
-
-import com.example.xxnetworktask.di.DaggerMovieTaskComponent
 import com.example.xxnetworktask.di.MovieListModule
-import com.example.xxnetworktask.di.NetworkModule
 import com.example.xxnetworktask.model.datamodel.MovieListDataModel
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
-import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
 import com.example.xxnetworktask.presentation.viewmodel.IMovieListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -124,6 +121,9 @@ class MovieListActivity : AppCompatActivity() {
 
     private fun onMovieClick(movieId: Int) {
         Log.e("sss", "Movie Id is ====>$movieId")
+        val intent = Intent(this, MovieDetailsActivity::class.java)
+        intent.putExtra("movieId", movieId)
+        startActivity(intent)
     }
 
     override fun onDestroy() {

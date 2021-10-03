@@ -13,5 +13,6 @@ interface MovieTaskComponent {
     fun inject(application: MovieTaskApp)
 
     fun plus(movieListModule: MovieListModule): MovieListComponent
+    fun plus(movieDetailsModule: MovieDetailsModule): MovieDetailsComponent
 
 }

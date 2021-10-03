@@ -12,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.XXNetworkTask">
-        <activity android:name=".presentation.view.MovieDetailsActivity"></activity>
+        <activity
+            android:name=".presentation.view.MovieDetailsActivity"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".presentation.view.MovieListActivity"
             android:exported="true">
