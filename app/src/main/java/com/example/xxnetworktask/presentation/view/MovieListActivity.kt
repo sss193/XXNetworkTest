@@ -2,16 +2,33 @@ package com.example.xxnetworktask.presentation.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.xxnetworktask.R
-import com.example.xxnetworktask.databinding.ActivityHomeBinding
+import com.example.xxnetworktask.MovieTaskApp
+
 import com.example.xxnetworktask.databinding.ActivityMovieListBinding
+
+import com.example.xxnetworktask.di.DaggerMovieTaskComponent
+import com.example.xxnetworktask.di.MovieListModule
+import com.example.xxnetworktask.di.NetworkModule
 import com.example.xxnetworktask.model.datamodel.MovieListDataModel
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
+import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
+import com.example.xxnetworktask.presentation.viewmodel.IMovieListViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import javax.inject.Inject
 
 class MovieListActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var movieListViewModel: IMovieListViewModel
+
+    private val globalDisposable = CompositeDisposable()
+
     private var currentPage = 1
     private var totalPage = 1
     private var loading = false
@@ -23,6 +40,14 @@ class MovieListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMovieListBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        initializeDagger()
+        initRecyclerView()
+        subscribeToMovieList()
+
+    }
+
+    private fun initializeDagger() {
+        MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieListModule()).inject(this)
     }
 
     private fun populateUi(movieListDataModel: MovieListDataModel) {
@@ -30,10 +55,11 @@ class MovieListActivity : AppCompatActivity() {
         totalPage = movieListDataModel._totalPages
         currentPage = movieListDataModel._page
 
+        movieListAdapter.setMovieListResponse(movieListDataModel._movieList)
     }
 
     private fun initRecyclerView() {
-        movieListAdapter = MovieListAdapter(this)
+        movieListAdapter = MovieListAdapter(this, ::onMovieClick)
         val layoutManager = LinearLayoutManager(this)
         with(viewBinding.rvMovieList) {
             this.layoutManager = layoutManager
@@ -51,18 +77,61 @@ class MovieListActivity : AppCompatActivity() {
     private fun setScrollListener(layoutManager: LinearLayoutManager) {
         viewBinding.rvMovieList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 && shouldScroll()) {
+                if (dy > 0 && shouldScroll(
+                        layoutManager.childCount,
+                        layoutManager.findFirstVisibleItemPosition(),
+                        layoutManager.itemCount
+                    )
+                ) {
                     loadMore()
                 }
             }
         })
     }
 
-    private fun shouldScroll(): Boolean = currentPage < totalPage && loading.not()
+    private fun shouldScroll(
+        visibleItemCount: Int,
+        firstVisibleItems: Int,
+        totalItemCount: Int
+    ): Boolean = currentPage < totalPage && loading.not()
+            && (visibleItemCount + firstVisibleItems >= totalItemCount) && firstVisibleItems >= 0
 
     private fun loadMore() {
         currentPage++
-        //         subscribeToMovieList()
+        subscribeToMovieList()
+    }
+
+    private fun subscribeToMovieList() {
+        movieListViewModel.getMovieListBySearchQuery("hero", currentPage)
+            .doOnSubscribe { globalDisposable.add(it) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableSingleObserver<MovieListDataModel>() {
+                override fun onSuccess(t: MovieListDataModel) {
+                    loading = false
+                    populateUi(t)
+                    Log.e("sss", "onSuccess===>${t._movieList.size}")
+                    Log.e("sss", "currentPage===>${t._page}")
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e("sss", "onError===> $e")
+                    loading = false
+                }
+            }
+
+            )
+    }
+
+    private fun onMovieClick(movieId: Int) {
+        Log.e("sss", "Movie Id is ====>$movieId")
+    }
+
+    override fun onDestroy() {
+        globalDisposable.run {
+            if (!isDisposed) dispose()
+            clear()
+        }
+        super.onDestroy()
     }
 
 }

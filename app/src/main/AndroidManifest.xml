@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MovieTaskApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,16 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.XXNetworkTask">
         <activity android:name=".presentation.view.MovieDetailsActivity"></activity>
-        <activity android:name=".presentation.view.MovieListActivity" />
-        <activity android:name=".common.BaseActivity" />
         <activity
-            android:name=".presentation.view.HomeActivity"
+            android:name=".presentation.view.MovieListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.view.HomeActivity"
+            android:exported="true">
+
         </activity>
     </application>
 

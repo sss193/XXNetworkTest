@@ -15,10 +15,6 @@ import dagger.Provides
 class MovieTaskModule {
 
     @Provides
-    fun providesHomeViewModel(movieTaskRepository: IMovieTaskRepository): IHomeViewModel =
-        HomeViewModel(movieTaskRepository)
-
-    @Provides
     fun providesMovieTaskRepository(remoteDataSource: IRemoteDataSource): IMovieTaskRepository =
         MovieTaskRepository(remoteDataSource)
 

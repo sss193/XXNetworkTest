@@ -4,11 +4,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.xxnetworktask.R
 import com.example.xxnetworktask.databinding.LayoutRowMovieListBinding
 import com.example.xxnetworktask.model.datamodel.MovieDetailsDataModel
 
-class MovieListAdapter(private val context: Context) :
+class MovieListAdapter(private val context: Context, private val onMovieClick: (Int) -> Unit) :
     RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>() {
+
+    companion object {
+        const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500/"
+    }
 
     private var movieList = mutableListOf<MovieDetailsDataModel>()
     private val layoutInflater = LayoutInflater.from(context)
@@ -31,6 +37,15 @@ class MovieListAdapter(private val context: Context) :
         holder.apply {
             viewBinding.apply {
                 tvMovieName.text = movieList[position]._title
+
+                Glide.with(context)
+                    .load(POSTER_BASE_URL + movieList[position]._poster)
+                    .placeholder(R.drawable.ic_load)
+                    .error(R.drawable.ic_not_found)
+                    .into(imgMoviePoster)
+
+                movieRowLayout.setOnClickListener { onMovieClick(movieList[position]._id) }
+
             }
         }
     }

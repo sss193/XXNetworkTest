@@ -20,9 +20,6 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityHomeBinding
 
-    companion object {
-        const val BASE_URL = "https://api.themoviedb.org/"
-    }
 
     private val globalDisposable = CompositeDisposable()
 
@@ -31,22 +28,22 @@ class HomeActivity : AppCompatActivity() {
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        initializeDagger()
+       // initializeDagger()
 
-        homeViewModel.getMovieListBySearchQuery("hero", 1)
-            .doOnSubscribe { globalDisposable.add(it) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<MovieListDataModel>() {
-                override fun onSuccess(t: MovieListDataModel) {
-                    Log.e("sss", "onSuccess===>${t._movieList.size}")
-                }
+        /*  homeViewModel.getMovieListBySearchQuery("hero", 1)
+              .doOnSubscribe { globalDisposable.add(it) }
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(object : DisposableSingleObserver<MovieListDataModel>() {
+                  override fun onSuccess(t: MovieListDataModel) {
+                      Log.e("sss", "onSuccess===>${t._movieList.size}")
+                  }
 
-                override fun onError(e: Throwable) {
-                    Log.e("sss", "onError===> $e")
-                }
-            }
+                  override fun onError(e: Throwable) {
+                      Log.e("sss", "onError===> $e")
+                  }
+              }
 
-            )
+              )*/
     }
 
     override fun onDestroy() {
@@ -57,9 +54,5 @@ class HomeActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun initializeDagger() {
-        DaggerMovieTaskComponent.builder()
-            .networkModule(NetworkModule(BASE_URL))
-            .build().inject(this)
-    }
+
 }
