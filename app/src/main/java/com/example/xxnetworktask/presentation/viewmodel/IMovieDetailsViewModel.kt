@@ -2,6 +2,7 @@ package com.example.xxnetworktask.presentation.viewmodel
 
 import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
 import com.example.xxnetworktask.model.localdatasource.MovieEntity
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 interface IMovieDetailsViewModel {
@@ -9,4 +10,6 @@ interface IMovieDetailsViewModel {
     fun insertMovie(movie: MovieEntity)
 
     fun getMovieWishList(): Single<List<MovieEntity>>
+
+    fun getMovieById(movieId: Int): Maybe<MovieEntity>
 }

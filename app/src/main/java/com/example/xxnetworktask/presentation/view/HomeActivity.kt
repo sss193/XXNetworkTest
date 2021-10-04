@@ -1,7 +1,15 @@
 package com.example.xxnetworktask.presentation.view
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
+import android.view.Menu
+import androidx.appcompat.widget.SearchView
+import com.example.xxnetworktask.MySuggestionProvider
+import com.example.xxnetworktask.R
 import com.example.xxnetworktask.databinding.ActivityHomeBinding
 import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -13,32 +21,17 @@ class HomeActivity : AppCompatActivity() {
     lateinit var homeViewModel: IHomeViewModel
 
     private lateinit var viewBinding: ActivityHomeBinding
-
-
     private val globalDisposable = CompositeDisposable()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        viewBinding.button.setOnClickListener {
+            clearHistory()
+        }
 
-       // initializeDagger()
-
-        /*  homeViewModel.getMovieListBySearchQuery("hero", 1)
-              .doOnSubscribe { globalDisposable.add(it) }
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(object : DisposableSingleObserver<MovieListDataModel>() {
-                  override fun onSuccess(t: MovieListDataModel) {
-                      Log.e("sss", "onSuccess===>${t._movieList.size}")
-                  }
-
-                  override fun onError(e: Throwable) {
-                      Log.e("sss", "onError===> $e")
-                  }
-              }
-
-              )*/
     }
+
 
     override fun onDestroy() {
         globalDisposable.run {
@@ -46,6 +39,56 @@ class HomeActivity : AppCompatActivity() {
             clear()
         }
         super.onDestroy()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+
+    private fun handleIntent(intent: Intent) {
+        val suggestionProvider = SearchRecentSuggestions(
+            this,
+            MySuggestionProvider.AUTHORITY,
+            MySuggestionProvider.MODE
+        )
+        if (Intent.ACTION_SEARCH == intent.action) {
+            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
+                doMySearch(query)
+                suggestionProvider.saveRecentQuery(query, null)
+
+            }
+        }
+
+    }
+
+    private fun clearHistory() {
+        SearchRecentSuggestions(this, MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE)
+            .clearHistory()
+    }
+
+    private fun doMySearch(query: String) {
+
+        viewBinding.textView.text = "You searched for $query"
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+
+        // Get the SearchView and set the searchable configuration
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView.apply {
+            // Assumes current activity is the searchable activity
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
+        }
+
+        return true
     }
 
 

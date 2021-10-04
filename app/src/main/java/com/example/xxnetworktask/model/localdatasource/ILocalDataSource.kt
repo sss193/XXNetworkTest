@@ -1,6 +1,5 @@
 package com.example.xxnetworktask.model.localdatasource
 
-import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 

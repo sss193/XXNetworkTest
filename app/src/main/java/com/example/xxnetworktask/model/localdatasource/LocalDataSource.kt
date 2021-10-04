@@ -13,6 +13,8 @@ class LocalDataSource(private val movieDAO: MovieDAO, private val exec: Executor
         .observeOn(AndroidSchedulers.mainThread())
 
     override fun getMovieById(movieId: Int): Maybe<MovieEntity> = movieDAO.getMovieById(movieId)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
     override fun insertMovie(movie: MovieEntity) = exec.execute { movieDAO.insertMovie(movie) }
 

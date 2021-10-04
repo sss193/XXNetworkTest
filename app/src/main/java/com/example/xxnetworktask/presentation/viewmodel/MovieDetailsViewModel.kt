@@ -3,6 +3,7 @@ package com.example.xxnetworktask.presentation.viewmodel
 import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
 import com.example.xxnetworktask.model.localdatasource.MovieEntity
 import com.example.xxnetworktask.model.repo.IMovieTaskRepository
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 
@@ -15,5 +16,9 @@ class MovieDetailsViewModel(private val movieTaskRepository: IMovieTaskRepositor
 
     override fun getMovieWishList(): Single<List<MovieEntity>> =
         movieTaskRepository.getMovieWishList()
+
+    override fun getMovieById(movieId: Int): Maybe<MovieEntity> =
+        movieTaskRepository.getMovieById(movieId)
+
 
 }
