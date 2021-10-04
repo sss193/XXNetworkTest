@@ -9,7 +9,6 @@ interface IMovieDetailsViewModel {
     fun getMovieDetails(id: Int): Single<MovieDetailsResponse>
     fun insertMovie(movie: MovieEntity)
 
-    fun getMovieWishList(): Single<List<MovieEntity>>
 
     fun getMovieById(movieId: Int): Maybe<MovieEntity>
 }

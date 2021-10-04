@@ -11,4 +11,7 @@ class MovieListViewModel(private val movieTaskRepository: IMovieTaskRepository) 
         queryText: String,
         page: Int
     ): Single<MovieListResponse> = movieTaskRepository.getMovieListBySearchQuery(queryText, page)
+
+    override fun getMovieWishList(): Single<MovieListResponse> =
+        movieTaskRepository.getMovieWishList()
 }

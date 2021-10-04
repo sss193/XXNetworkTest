@@ -10,13 +10,14 @@ data class MovieDetailsResponse(
     @SerializedName("original_title")
     val _title: String,
 
+    @SerializedName("poster_path")
+    val _poster: String,
+
     @SerializedName("overview")
-    val _description: String,
+    val _description: String?,
 
     @SerializedName("vote_average")
-    val _rating: Double,
+    val _rating: Double?
 
-    @SerializedName("poster_path")
-    val _poster: String
 )
 

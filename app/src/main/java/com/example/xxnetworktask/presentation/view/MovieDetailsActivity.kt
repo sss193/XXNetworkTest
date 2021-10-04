@@ -95,21 +95,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                         .into(viewBinding.imgWishList)
                 }
             })
-
-        /*    movieDetailsViewModel.getMovieWishList()
-                .doOnSubscribe { globalDisposable.add(it) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : DisposableSingleObserver<List<MovieEntity>>() {
-                    override fun onSuccess(t: List<MovieEntity>) {
-                        Log.e("sss", "onSuccess===> ${t.size}")
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.e("sss", "onError===> $e")
-                    }
-                }
-
-                )*/
     }
 
     private fun addwishList(movieDetailsResponse: MovieDetailsResponse) {

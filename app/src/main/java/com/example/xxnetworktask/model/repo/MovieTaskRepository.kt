@@ -24,7 +24,8 @@ class MovieTaskRepository(
     override fun getMovieListByGenre(genreId: Int, page: Int): Single<MovieListResponse> =
         remoteDataSource.getMovieListByGenre(genreId, page)
 
-    override fun getMovieWishList(): Single<List<MovieEntity>> = localDataSource.getMovieWishList()
+    override fun getMovieWishList(): Single<MovieListResponse> =
+        localDataSource.getMovieWishList().map { convertMovieListIntoMovieResponse(it) }
 
     override fun getMovieById(movieId: Int): Maybe<MovieEntity> =
         localDataSource.getMovieById(movieId)
@@ -32,5 +33,22 @@ class MovieTaskRepository(
     override fun insertMovie(movie: MovieEntity) = localDataSource.insertMovie(movie)
 
     override fun deleteAllMovie() = localDataSource.deleteAllMovie()
+
+    private fun convertMovieListIntoMovieResponse(data: List<MovieEntity>): MovieListResponse {
+        var movieList: MutableList<MovieDetailsResponse> = ArrayList()
+        for (movie in data) {
+            var movieDetailResponse =
+                MovieDetailsResponse(
+                    movie.movieId!!,
+                    movie.movieName!!,
+                    movie.movieImage!!,
+                    null,
+                    null
+                )
+            movieList.add(movieDetailResponse)
+
+        }
+        return MovieListResponse(1, movieList, 1, data.size)
+    }
 
 }

@@ -6,11 +6,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
+import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import com.example.xxnetworktask.MySuggestionProvider
 import com.example.xxnetworktask.R
+import com.example.xxnetworktask.common.ListRole
 import com.example.xxnetworktask.databinding.ActivityHomeBinding
+
 import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -70,9 +74,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun doMySearch(query: String) {
-
-        viewBinding.textView.text = "You searched for $query"
-
+        val intent = Intent(this, MovieListActivity::class.java)
+        intent.putExtra("role", "SEARCH_LIST")
+        intent.putExtra("searchQuery", query)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -91,5 +96,17 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+        when (item.getItemId()) {
+            R.id.wishList -> {
+                val intent = Intent(this, MovieListActivity::class.java)
+                intent.putExtra("role", "WISH_LIST")
+                startActivity(intent)
+                return true
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

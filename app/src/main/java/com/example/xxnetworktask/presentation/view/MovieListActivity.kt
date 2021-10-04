@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.xxnetworktask.MovieTaskApp
+import com.example.xxnetworktask.common.ListRole
 import com.example.xxnetworktask.databinding.ActivityMovieListBinding
 import com.example.xxnetworktask.di.MovieListModule
 import com.example.xxnetworktask.model.datamodel.MovieListResponse
@@ -31,6 +32,7 @@ class MovieListActivity : AppCompatActivity() {
     private lateinit var movieListAdapter: MovieListAdapter
 
     private lateinit var viewBinding: ActivityMovieListBinding
+    private lateinit var searchQuery: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +40,44 @@ class MovieListActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         initializeDagger()
         initRecyclerView()
-        subscribeToMovieList()
 
+        getIntentList()
+    }
+
+    private fun getIntentList() {
+
+        when (intent.getStringExtra("role")) {
+            "SEARCH_LIST" -> {
+                searchQuery = intent.getStringExtra("searchQuery").toString()
+                subscribeToMovieList(searchQuery)
+            }
+            "WISH_LIST" -> {
+                searchQuery = intent.getStringExtra("searchQuery").toString()
+                subscribeToWishList()
+            }
+        }
+
+    }
+
+    private fun subscribeToWishList() {
+        movieListViewModel.getMovieWishList()
+            .doOnSubscribe { globalDisposable.add(it) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableSingleObserver<MovieListResponse>() {
+                override fun onSuccess(t: MovieListResponse) {
+                    loading = false
+                    populateUi(t)
+                    Log.e("sss", "onSuccess===>${t._movieList.size}")
+                    Log.e("sss", "currentPage===>${t._page}")
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e("sss", "onError===> $e")
+                    loading = false
+                }
+            }
+
+            )
     }
 
     private fun initializeDagger() {
@@ -94,11 +132,11 @@ class MovieListActivity : AppCompatActivity() {
 
     private fun loadMore() {
         currentPage++
-        subscribeToMovieList()
+        subscribeToMovieList(searchQuery)
     }
 
-    private fun subscribeToMovieList() {
-        movieListViewModel.getMovieListBySearchQuery("hero", currentPage)
+    private fun subscribeToMovieList(searchQuery: String?) {
+        movieListViewModel.getMovieListBySearchQuery(searchQuery!!, currentPage)
             .doOnSubscribe { globalDisposable.add(it) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSingleObserver<MovieListResponse>() {

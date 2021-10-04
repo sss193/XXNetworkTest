@@ -14,7 +14,7 @@ interface IMovieTaskRepository {
 
     fun getMovieListByGenre(genreId: Int, page: Int): Single<MovieListResponse>
 
-    fun getMovieWishList(): Single<List<MovieEntity>>
+    fun getMovieWishList(): Single<MovieListResponse>
     fun getMovieById(movieId: Int): Maybe<MovieEntity>
     fun insertMovie(movie: MovieEntity)
     fun deleteAllMovie()

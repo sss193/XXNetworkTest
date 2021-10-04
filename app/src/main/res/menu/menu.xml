@@ -10,4 +10,10 @@
         android:orderInCategory="100"
         android:title="Search Movie"
         app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/wishList"
+        android:title="wishList"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_wishlist_home" />
 </menu>

@@ -14,9 +14,6 @@ class MovieDetailsViewModel(private val movieTaskRepository: IMovieTaskRepositor
 
     override fun insertMovie(movie: MovieEntity) = movieTaskRepository.insertMovie(movie)
 
-    override fun getMovieWishList(): Single<List<MovieEntity>> =
-        movieTaskRepository.getMovieWishList()
-
     override fun getMovieById(movieId: Int): Maybe<MovieEntity> =
         movieTaskRepository.getMovieById(movieId)
 
