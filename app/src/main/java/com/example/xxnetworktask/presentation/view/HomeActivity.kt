@@ -11,19 +11,23 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import com.example.xxnetworktask.MySuggestionProvider
 import com.example.xxnetworktask.R
+import com.example.xxnetworktask.common.AppConstant.Companion.ACTIVITY_ROLE
+import com.example.xxnetworktask.common.AppConstant.Companion.SEARCH_LIST
+import com.example.xxnetworktask.common.AppConstant.Companion.SEARCH_QUERY
+import com.example.xxnetworktask.common.AppConstant.Companion.WISH_LIST
+import com.example.xxnetworktask.common.BaseActivity
 import com.example.xxnetworktask.databinding.ActivityHomeBinding
 import com.example.xxnetworktask.presentation.viewmodel.HomeViewModel
 
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
 //    @Inject
 //    lateinit var homeViewModel: HomeViewModel
 
     private lateinit var viewBinding: ActivityHomeBinding
-    private val globalDisposable = CompositeDisposable()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
@@ -35,14 +39,6 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-
-    override fun onDestroy() {
-        globalDisposable.run {
-            if (!isDisposed) dispose()
-            clear()
-        }
-        super.onDestroy()
-    }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
@@ -74,8 +70,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun doMySearch(query: String) {
         val intent = Intent(this, MovieListActivity::class.java)
-        intent.putExtra("role", "SEARCH_LIST")
-        intent.putExtra("searchQuery", query)
+        intent.putExtra(ACTIVITY_ROLE, SEARCH_LIST)
+        intent.putExtra(SEARCH_QUERY, query)
         startActivity(intent)
     }
 
@@ -100,7 +96,7 @@ class HomeActivity : AppCompatActivity() {
         when (item.getItemId()) {
             R.id.wishList -> {
                 val intent = Intent(this, MovieListActivity::class.java)
-                intent.putExtra("role", "WISH_LIST")
+                intent.putExtra(ACTIVITY_ROLE, WISH_LIST)
                 startActivity(intent)
                 return true
             }

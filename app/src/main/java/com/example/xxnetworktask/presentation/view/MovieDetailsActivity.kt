@@ -1,12 +1,14 @@
 package com.example.xxnetworktask.presentation.view
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.xxnetworktask.MovieTaskApp
 import com.example.xxnetworktask.R
+import com.example.xxnetworktask.common.AppConstant.Companion.MOVIE_ID
+import com.example.xxnetworktask.common.BaseActivity
 import com.example.xxnetworktask.databinding.ActivityMovieDetailsBinding
 import com.example.xxnetworktask.di.MovieDetailsModule
 import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
@@ -14,12 +16,11 @@ import com.example.xxnetworktask.model.localdatasource.MovieEntity
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
 import com.example.xxnetworktask.presentation.viewmodel.MovieDetailsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableMaybeObserver
 import io.reactivex.observers.DisposableSingleObserver
 import javax.inject.Inject
 
-class MovieDetailsActivity : AppCompatActivity() {
+class MovieDetailsActivity : BaseActivity() {
 
     @Inject
     lateinit var movieDetailsViewModel: MovieDetailsViewModel
@@ -27,14 +28,14 @@ class MovieDetailsActivity : AppCompatActivity() {
     private var isInWishList: Boolean = false
 
     private lateinit var viewBinding: ActivityMovieDetailsBinding
-    private val globalDisposable = CompositeDisposable()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initializeDagger()
-        val movieId = intent.getIntExtra("movieId", 0)
+        val movieId = intent.getIntExtra(MOVIE_ID, 0)
         subscribeToMovieList(movieId)
         subscribeTocheackWishlist(movieId)
     }
@@ -113,13 +114,6 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        globalDisposable.run {
-            if (!isDisposed) dispose()
-            clear()
-        }
-        super.onDestroy()
-    }
 
     private fun initializeDagger() {
         MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieDetailsModule(this)).inject(this)

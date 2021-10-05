@@ -8,6 +8,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.xxnetworktask.MovieTaskApp
+import com.example.xxnetworktask.common.AppConstant.Companion.ACTIVITY_ROLE
+import com.example.xxnetworktask.common.AppConstant.Companion.MOVIE_ID
+import com.example.xxnetworktask.common.AppConstant.Companion.SEARCH_LIST
+import com.example.xxnetworktask.common.AppConstant.Companion.SEARCH_QUERY
+import com.example.xxnetworktask.common.AppConstant.Companion.WISH_LIST
+import com.example.xxnetworktask.common.BaseActivity
 import com.example.xxnetworktask.databinding.ActivityMovieListBinding
 import com.example.xxnetworktask.di.MovieListModule
 import com.example.xxnetworktask.model.datamodel.MovieListResponse
@@ -18,12 +24,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import javax.inject.Inject
 
-class MovieListActivity : AppCompatActivity() {
+class MovieListActivity : BaseActivity() {
 
     @Inject
     lateinit var movieListViewModel: MovieListViewModel
-
-    private val globalDisposable = CompositeDisposable()
 
     private var currentPage = 1
     private var totalPage = 1
@@ -45,13 +49,12 @@ class MovieListActivity : AppCompatActivity() {
 
     private fun getIntentList() {
 
-        when (intent.getStringExtra("role")) {
-            "SEARCH_LIST" -> {
-                searchQuery = intent.getStringExtra("searchQuery").toString()
+        when (intent.getStringExtra(ACTIVITY_ROLE)) {
+            SEARCH_LIST -> {
+                searchQuery = intent.getStringExtra(SEARCH_QUERY).toString()
                 subscribeToMovieList(searchQuery)
             }
-            "WISH_LIST" -> {
-                searchQuery = intent.getStringExtra("searchQuery").toString()
+            WISH_LIST -> {
                 subscribeToWishList()
             }
         }
@@ -158,16 +161,9 @@ class MovieListActivity : AppCompatActivity() {
     private fun onMovieClick(movieId: Int) {
         Log.e("sss", "Movie Id is ====>$movieId")
         val intent = Intent(this, MovieDetailsActivity::class.java)
-        intent.putExtra("movieId", movieId)
+        intent.putExtra(MOVIE_ID, movieId)
         startActivity(intent)
     }
 
-    override fun onDestroy() {
-        globalDisposable.run {
-            if (!isDisposed) dispose()
-            clear()
-        }
-        super.onDestroy()
-    }
 
 }

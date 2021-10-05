@@ -12,13 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.XXNetworkTask">
-
+        <activity android:name=".common.BaseActivity"></activity>
 
         <provider
             android:name=".MySuggestionProvider"
+            android:authorities="com.example.xxnetworktask.MySuggestionProvider"
             android:exported="false"
-            android:syncable="true"
-            android:authorities="com.example.xxnetworktask.MySuggestionProvider" />
+            android:syncable="true" />
 
         <activity
             android:name=".presentation.view.MovieDetailsActivity"
