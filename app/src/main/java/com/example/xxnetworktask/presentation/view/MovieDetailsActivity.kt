@@ -4,7 +4,6 @@ package com.example.xxnetworktask.presentation.view
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.xxnetworktask.MovieTaskApp
 import com.example.xxnetworktask.R
@@ -110,7 +109,9 @@ class MovieDetailsActivity : BaseActivity() {
             movieDetailsViewModel.insertMovie(movieEntity)
             subscribeTocheackWishlist(movieDetailsResponse._id)
         } else {
-            Toast.makeText(this, "Already in wish list", Toast.LENGTH_SHORT).show()
+
+            movieDetailsViewModel.deleteMovieById(movieDetailsResponse._id)
+            subscribeTocheackWishlist(movieDetailsResponse._id)
         }
 
     }

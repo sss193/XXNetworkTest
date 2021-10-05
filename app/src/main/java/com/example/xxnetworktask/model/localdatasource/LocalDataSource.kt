@@ -16,6 +16,8 @@ class LocalDataSource(private val movieDAO: MovieDAO, private val exec: Executor
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 
+    override fun deleteMovieById(movieId: Int) = exec.execute { movieDAO.deleteMovieById(movieId) }
+
     override fun insertMovie(movie: MovieEntity) = exec.execute { movieDAO.insertMovie(movie) }
 
     override fun deleteAllMovie() = exec.execute { movieDAO.deleteAllMovie() }

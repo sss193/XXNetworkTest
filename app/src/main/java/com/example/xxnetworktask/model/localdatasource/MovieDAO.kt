@@ -7,7 +7,6 @@ import androidx.room.Query
 import io.reactivex.Maybe
 import io.reactivex.Single
 
-
 @Dao
 interface MovieDAO {
     @Query("SELECT * FROM MovieEntity")
@@ -16,6 +15,8 @@ interface MovieDAO {
     @Query("SELECT * FROM MovieEntity WHERE movieId = :movieId ")
     fun getMovieById(movieId: Int): Maybe<MovieEntity>
 
+    @Query("DELETE  FROM MovieEntity WHERE movieId = :movieId ")
+    fun deleteMovieById(movieId: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovie(movie: MovieEntity)

@@ -18,6 +18,8 @@ interface IMovieTaskRepository {
 
     fun getMovieById(movieId: Int): Maybe<MovieEntity>
 
+    fun deleteMovieById(movieId: Int)
+
     fun insertMovie(movie: MovieEntity)
 
     fun deleteAllMovie()

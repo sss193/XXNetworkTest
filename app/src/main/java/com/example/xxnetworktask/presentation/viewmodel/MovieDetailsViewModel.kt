@@ -18,5 +18,7 @@ class MovieDetailsViewModel(private val movieTaskRepository: IMovieTaskRepositor
     fun getMovieById(movieId: Int): Maybe<MovieEntity> =
         movieTaskRepository.getMovieById(movieId)
 
+    fun deleteMovieById(movieId: Int) = movieTaskRepository.deleteMovieById(movieId)
+
 
 }

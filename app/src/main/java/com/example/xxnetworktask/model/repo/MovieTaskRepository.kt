@@ -30,6 +30,8 @@ class MovieTaskRepository(
     override fun getMovieById(movieId: Int): Maybe<MovieEntity> =
         localDataSource.getMovieById(movieId)
 
+    override fun deleteMovieById(movieId: Int) = localDataSource.deleteMovieById(movieId)
+
     override fun insertMovie(movie: MovieEntity) = localDataSource.insertMovie(movie)
 
     override fun deleteAllMovie() = localDataSource.deleteAllMovie()
