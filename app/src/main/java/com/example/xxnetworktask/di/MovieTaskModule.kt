@@ -1,5 +1,6 @@
 package com.example.xxnetworktask.di
 
+import com.example.xxnetworktask.common.AppConstant
 import com.example.xxnetworktask.model.localdatasource.ILocalDataSource
 import com.example.xxnetworktask.model.localdatasource.LocalDataSource
 import com.example.xxnetworktask.model.localdatasource.MovieDAO
@@ -32,7 +33,7 @@ class MovieTaskModule {
 
     @Provides
     fun providesRemoteDataSource(movieTaskApi: MovieTaskApi): IRemoteDataSource =
-        RemoteDataSource(movieTaskApi)
+        RemoteDataSource(movieTaskApi, AppConstant.API_KEY, AppConstant.LANGUAGE_CODE)
 
     @Provides
     fun providesLocalDataSource(movieDAO: MovieDAO, exec: Executor): ILocalDataSource =

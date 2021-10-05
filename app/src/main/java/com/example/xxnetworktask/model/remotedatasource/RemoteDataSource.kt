@@ -1,18 +1,20 @@
 package com.example.xxnetworktask.model.remotedatasource
 
 
-import com.example.xxnetworktask.common.AppConstant.Companion.API_KEY
-import com.example.xxnetworktask.common.AppConstant.Companion.LANGUAGE_CODE
+
 import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
 import com.example.xxnetworktask.model.datamodel.MovieListResponse
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-class RemoteDataSource(private val movieTaskApi: MovieTaskApi) : IRemoteDataSource {
+class RemoteDataSource(
+    private val movieTaskApi: MovieTaskApi,
+    private val apiKey: String, private val languageCode: String
+) : IRemoteDataSource {
 
     override fun getMovieDetails(id: Int): Single<MovieDetailsResponse> =
-        movieTaskApi.getMovieDetails(id, API_KEY, LANGUAGE_CODE)
+        movieTaskApi.getMovieDetails(id, apiKey, languageCode)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -21,13 +23,13 @@ class RemoteDataSource(private val movieTaskApi: MovieTaskApi) : IRemoteDataSour
         queryText: String,
         page: Int
     ): Single<MovieListResponse> =
-        movieTaskApi.getMovieListBySearchQuery(API_KEY, queryText, page)
+        movieTaskApi.getMovieListBySearchQuery(apiKey, queryText, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
 
     override fun getMovieListByGenre(genreId: Int, page: Int): Single<MovieListResponse> =
-        movieTaskApi.getMovieListByGenre(API_KEY, genreId, page)
+        movieTaskApi.getMovieListByGenre(apiKey, genreId, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 }
