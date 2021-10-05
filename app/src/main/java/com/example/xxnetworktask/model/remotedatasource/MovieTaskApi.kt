@@ -9,6 +9,13 @@ import retrofit2.http.Query
 
 interface MovieTaskApi {
 
+    /**
+     * Used to fetch Movie details from server
+     * @param id movie id
+     * @param api_key api key
+     * @param language language
+     * @return  Movie details response
+     */
     @GET("/3/movie/{id}")
     fun getMovieDetails(
         @Path("id") id: Int,
@@ -16,6 +23,14 @@ interface MovieTaskApi {
         @Query(value = "language") language: String
     ): Single<MovieDetailsResponse>
 
+
+    /**
+     * Used to fetch Movie list with search query
+     * @param api_key api key
+     * @param query search query
+     * @param page page
+     * @return  Movie list
+     */
     @GET("/3/search/movie")
     fun getMovieListBySearchQuery(
         @Query(value = "api_key") api_key: String,
@@ -24,6 +39,13 @@ interface MovieTaskApi {
     ): Single<MovieListResponse>
 
 
+    /**
+     * Used to fetch Movie list with selected genre
+     * @param api_key api key
+     * @param with_genres genre id
+     * @param page page
+     * @return  Movie list
+     */
     @GET("/3/discover/movie")
     fun getMovieListByGenre(
         @Query(value = "api_key") api_key: String,

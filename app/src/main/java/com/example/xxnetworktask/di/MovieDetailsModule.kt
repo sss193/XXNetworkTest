@@ -1,15 +1,21 @@
 package com.example.xxnetworktask.di
 
-import com.example.xxnetworktask.model.repo.IMovieTaskRepository
-import com.example.xxnetworktask.presentation.viewmodel.IMovieDetailsViewModel
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
+import com.example.xxnetworktask.presentation.view.MovieDetailsActivity
+import com.example.xxnetworktask.presentation.view.MovieListActivity
 import com.example.xxnetworktask.presentation.viewmodel.MovieDetailsViewModel
+import com.example.xxnetworktask.presentation.viewmodel.MovieViewModelFactory
 import dagger.Module
 import dagger.Provides
 
 @Module
-class MovieDetailsModule {
+class MovieDetailsModule(private val activity: AppCompatActivity) {
 
     @Provides
-    fun providesMovieDetailsViewModel(movieTaskRepository: IMovieTaskRepository): IMovieDetailsViewModel =
-        MovieDetailsViewModel(movieTaskRepository)
+    fun providesMovieDetailsViewModel(movieViewModelFactory: MovieViewModelFactory): MovieDetailsViewModel =
+        ViewModelProviders.of(activity, movieViewModelFactory)
+            .get(MovieDetailsViewModel::class.java)
+
 }

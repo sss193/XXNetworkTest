@@ -12,7 +12,7 @@ import com.example.xxnetworktask.di.MovieDetailsModule
 import com.example.xxnetworktask.model.datamodel.MovieDetailsResponse
 import com.example.xxnetworktask.model.localdatasource.MovieEntity
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
-import com.example.xxnetworktask.presentation.viewmodel.IMovieDetailsViewModel
+import com.example.xxnetworktask.presentation.viewmodel.MovieDetailsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableMaybeObserver
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class MovieDetailsActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var movieDetailsViewModel: IMovieDetailsViewModel
+    lateinit var movieDetailsViewModel: MovieDetailsViewModel
 
     private var isInWishList: Boolean = false
 
@@ -99,7 +99,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun addwishList(movieDetailsResponse: MovieDetailsResponse) {
         if (isInWishList.not()) {
-            var movieEntity = MovieEntity().apply {
+            val movieEntity = MovieEntity().apply {
                 movieId = movieDetailsResponse._id
                 movieName = movieDetailsResponse._title
                 movieImage = movieDetailsResponse._poster
@@ -108,7 +108,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             subscribeTocheackWishlist(movieDetailsResponse._id)
             Log.e("sss", "movie Inserted===>")
         } else {
-            Toast.makeText(this, "Alreay in wish list", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Already in wish list", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -122,6 +122,6 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun initializeDagger() {
-        MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieDetailsModule()).inject(this)
+        MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieDetailsModule(this)).inject(this)
     }
 }

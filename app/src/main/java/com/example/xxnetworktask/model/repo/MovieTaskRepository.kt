@@ -35,9 +35,9 @@ class MovieTaskRepository(
     override fun deleteAllMovie() = localDataSource.deleteAllMovie()
 
     private fun convertMovieListIntoMovieResponse(data: List<MovieEntity>): MovieListResponse {
-        var movieList: MutableList<MovieDetailsResponse> = ArrayList()
+        val movieList: MutableList<MovieDetailsResponse> = ArrayList()
         for (movie in data) {
-            var movieDetailResponse =
+            val movieDetailResponse =
                 MovieDetailsResponse(
                     movie.movieId!!,
                     movie.movieName!!,

@@ -8,8 +8,7 @@ import com.example.xxnetworktask.model.remotedatasource.MovieTaskApi
 import com.example.xxnetworktask.model.remotedatasource.RemoteDataSource
 import com.example.xxnetworktask.model.repo.IMovieTaskRepository
 import com.example.xxnetworktask.model.repo.MovieTaskRepository
-import com.example.xxnetworktask.presentation.viewmodel.HomeViewModel
-import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
+import com.example.xxnetworktask.presentation.viewmodel.MovieViewModelFactory
 import dagger.Module
 import dagger.Provides
 import java.util.concurrent.Executor
@@ -17,6 +16,12 @@ import java.util.concurrent.Executor
 
 @Module
 class MovieTaskModule {
+
+    @Provides
+    fun providesMovieTaskViewModelFactory(
+        movieTaskRepository: IMovieTaskRepository
+    ): MovieViewModelFactory =
+        MovieViewModelFactory(movieTaskRepository)
 
     @Provides
     fun providesMovieTaskRepository(

@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.xxnetworktask.MovieTaskApp
-import com.example.xxnetworktask.common.ListRole
 import com.example.xxnetworktask.databinding.ActivityMovieListBinding
 import com.example.xxnetworktask.di.MovieListModule
 import com.example.xxnetworktask.model.datamodel.MovieListResponse
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
-import com.example.xxnetworktask.presentation.viewmodel.IMovieListViewModel
+import com.example.xxnetworktask.presentation.viewmodel.MovieListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -22,7 +21,7 @@ import javax.inject.Inject
 class MovieListActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var movieListViewModel: IMovieListViewModel
+    lateinit var movieListViewModel: MovieListViewModel
 
     private val globalDisposable = CompositeDisposable()
 
@@ -81,7 +80,7 @@ class MovieListActivity : AppCompatActivity() {
     }
 
     private fun initializeDagger() {
-        MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieListModule()).inject(this)
+        MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieListModule(this)).inject(this)
     }
 
     private fun populateUi(movieListResponse: MovieListResponse) {

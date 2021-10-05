@@ -6,23 +6,21 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import com.example.xxnetworktask.MySuggestionProvider
 import com.example.xxnetworktask.R
-import com.example.xxnetworktask.common.ListRole
 import com.example.xxnetworktask.databinding.ActivityHomeBinding
+import com.example.xxnetworktask.presentation.viewmodel.HomeViewModel
 
-import com.example.xxnetworktask.presentation.viewmodel.IHomeViewModel
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var homeViewModel: IHomeViewModel
+//    @Inject
+//    lateinit var homeViewModel: HomeViewModel
 
     private lateinit var viewBinding: ActivityHomeBinding
     private val globalDisposable = CompositeDisposable()
@@ -30,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
         viewBinding.button.setOnClickListener {
             clearHistory()
         }
