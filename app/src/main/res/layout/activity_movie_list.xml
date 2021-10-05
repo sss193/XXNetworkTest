@@ -9,14 +9,29 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMovieList"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <ProgressBar
         android:id="@+id/pgLoadingView"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content" />
+
+    <include
+        android:id="@+id/errorView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/layout_error" />
+
+    <include
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/layout_empty" />
 
 </RelativeLayout>

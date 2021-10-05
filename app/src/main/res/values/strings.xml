@@ -9,4 +9,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="empty_text_msg">Your list is empty please add some item to your list </string>
+    <string name="error_text_msg">Something went wrong please try after some time </string>
 </resources>

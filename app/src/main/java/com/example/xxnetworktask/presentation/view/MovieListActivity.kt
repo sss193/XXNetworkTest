@@ -1,9 +1,9 @@
 package com.example.xxnetworktask.presentation.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +20,6 @@ import com.example.xxnetworktask.model.datamodel.MovieListResponse
 import com.example.xxnetworktask.presentation.view.adapter.MovieListAdapter
 import com.example.xxnetworktask.presentation.viewmodel.MovieListViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import javax.inject.Inject
 
@@ -43,7 +42,6 @@ class MovieListActivity : BaseActivity() {
         setContentView(viewBinding.root)
         initializeDagger()
         initRecyclerView()
-
         getIntentList()
     }
 
@@ -62,6 +60,7 @@ class MovieListActivity : BaseActivity() {
     }
 
     private fun subscribeToWishList() {
+        showProgressLayout()
         movieListViewModel.getMovieWishList()
             .doOnSubscribe { globalDisposable.add(it) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -69,12 +68,10 @@ class MovieListActivity : BaseActivity() {
                 override fun onSuccess(t: MovieListResponse) {
                     loading = false
                     populateUi(t)
-                    Log.e("sss", "onSuccess===>${t._movieList.size}")
-                    Log.e("sss", "currentPage===>${t._page}")
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.e("sss", "onError===> $e")
+                    showErrorLayout()
                     loading = false
                 }
             }
@@ -87,7 +84,11 @@ class MovieListActivity : BaseActivity() {
     }
 
     private fun populateUi(movieListResponse: MovieListResponse) {
-        //showContentLayout()
+        if (movieListResponse._movieList.isEmpty())
+            showEmptyLayout()
+        else
+            showContentLayout()
+
         totalPage = movieListResponse._totalPages
         currentPage = movieListResponse._page
 
@@ -138,6 +139,7 @@ class MovieListActivity : BaseActivity() {
     }
 
     private fun subscribeToMovieList(searchQuery: String?) {
+        showProgressLayout()
         movieListViewModel.getMovieListBySearchQuery(searchQuery!!, currentPage)
             .doOnSubscribe { globalDisposable.add(it) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -145,12 +147,10 @@ class MovieListActivity : BaseActivity() {
                 override fun onSuccess(t: MovieListResponse) {
                     loading = false
                     populateUi(t)
-                    Log.e("sss", "onSuccess===>${t._movieList.size}")
-                    Log.e("sss", "currentPage===>${t._page}")
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.e("sss", "onError===> $e")
+                    showErrorLayout()
                     loading = false
                 }
             }
@@ -159,11 +159,36 @@ class MovieListActivity : BaseActivity() {
     }
 
     private fun onMovieClick(movieId: Int) {
-        Log.e("sss", "Movie Id is ====>$movieId")
         val intent = Intent(this, MovieDetailsActivity::class.java)
         intent.putExtra(MOVIE_ID, movieId)
         startActivity(intent)
     }
 
+    private fun showContentLayout() {
+        viewBinding.rvMovieList.visibility = VISIBLE
+        viewBinding.pgLoadingView.visibility = GONE
+        viewBinding.errorView.errorLayout.visibility = GONE
+        viewBinding.emptyView.emptyLayout.visibility = GONE
+    }
 
+    private fun showProgressLayout() {
+        viewBinding.rvMovieList.visibility = GONE
+        viewBinding.pgLoadingView.visibility = VISIBLE
+        viewBinding.errorView.errorLayout.visibility = GONE
+        viewBinding.emptyView.emptyLayout.visibility = GONE
+    }
+
+    private fun showErrorLayout() {
+        viewBinding.rvMovieList.visibility = GONE
+        viewBinding.pgLoadingView.visibility = GONE
+        viewBinding.errorView.errorLayout.visibility = VISIBLE
+        viewBinding.emptyView.emptyLayout.visibility = GONE
+    }
+
+    private fun showEmptyLayout() {
+        viewBinding.rvMovieList.visibility = GONE
+        viewBinding.pgLoadingView.visibility = GONE
+        viewBinding.errorView.errorLayout.visibility = GONE
+        viewBinding.emptyView.emptyLayout.visibility = VISIBLE
+    }
 }

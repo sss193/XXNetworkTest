@@ -2,7 +2,8 @@ package com.example.xxnetworktask.presentation.view
 
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.xxnetworktask.MovieTaskApp
@@ -36,21 +37,23 @@ class MovieDetailsActivity : BaseActivity() {
         setContentView(viewBinding.root)
         initializeDagger()
         val movieId = intent.getIntExtra(MOVIE_ID, 0)
-        subscribeToMovieList(movieId)
+        subscribeToMovieDetails(movieId)
         subscribeTocheackWishlist(movieId)
     }
 
-    private fun subscribeToMovieList(movieId: Int) {
+    private fun subscribeToMovieDetails(movieId: Int) {
+        showProgressLayout()
         movieDetailsViewModel.getMovieDetails(movieId)
             .doOnSubscribe { globalDisposable.add(it) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSingleObserver<MovieDetailsResponse>() {
                 override fun onSuccess(t: MovieDetailsResponse) {
+                    showContentLayout()
                     populateUi(t)
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.e("sss", "onError===> $e")
+                    showErrorLayout()
                 }
             }
 
@@ -67,8 +70,7 @@ class MovieDetailsActivity : BaseActivity() {
                 .placeholder(R.drawable.ic_load)
                 .error(R.drawable.ic_not_found)
                 .into(imgPoster)
-            imgWishList.setOnClickListener { addwishList(movieDetailsResponse) }
-            //btnTest.setOnClickListener {  }
+            imgWishList.setOnClickListener { addWishList(movieDetailsResponse) }
         }
 
     }
@@ -86,7 +88,7 @@ class MovieDetailsActivity : BaseActivity() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.e("sss", "onError===> $e")
+                    showErrorLayout()
                 }
 
                 override fun onComplete() {
@@ -98,7 +100,7 @@ class MovieDetailsActivity : BaseActivity() {
             })
     }
 
-    private fun addwishList(movieDetailsResponse: MovieDetailsResponse) {
+    private fun addWishList(movieDetailsResponse: MovieDetailsResponse) {
         if (isInWishList.not()) {
             val movieEntity = MovieEntity().apply {
                 movieId = movieDetailsResponse._id
@@ -107,7 +109,6 @@ class MovieDetailsActivity : BaseActivity() {
             }
             movieDetailsViewModel.insertMovie(movieEntity)
             subscribeTocheackWishlist(movieDetailsResponse._id)
-            Log.e("sss", "movie Inserted===>")
         } else {
             Toast.makeText(this, "Already in wish list", Toast.LENGTH_SHORT).show()
         }
@@ -117,5 +118,23 @@ class MovieDetailsActivity : BaseActivity() {
 
     private fun initializeDagger() {
         MovieTaskApp.get(this).getMovieTaskComponent().plus(MovieDetailsModule(this)).inject(this)
+    }
+
+    private fun showContentLayout() {
+        viewBinding.contentView.visibility = VISIBLE
+        viewBinding.pgLoadingView.visibility = GONE
+        viewBinding.errorView.errorLayout.visibility = GONE
+    }
+
+    private fun showProgressLayout() {
+        viewBinding.contentView.visibility = GONE
+        viewBinding.pgLoadingView.visibility = VISIBLE
+        viewBinding.errorView.errorLayout.visibility = GONE
+    }
+
+    private fun showErrorLayout() {
+        viewBinding.contentView.visibility = VISIBLE
+        viewBinding.pgLoadingView.visibility = GONE
+        viewBinding.errorView.errorLayout.visibility = GONE
     }
 }

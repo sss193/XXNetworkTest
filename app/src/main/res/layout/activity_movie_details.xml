@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -8,56 +8,78 @@
     android:padding="10dp"
     tools:context=".presentation.view.MovieDetailsActivity">
 
-    <ImageView
-        android:id="@+id/img_poster"
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:src="@drawable/ic_not_found"
-        android:layout_height="350dp" />
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_poster"
+            android:layout_width="match_parent"
+            android:src="@drawable/ic_not_found"
+            android:layout_height="350dp" />
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:paddingHorizontal="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_movie_title"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginRight="50dp"
-            android:textSize="16sp"
-            android:text="This is movie Name" />
-
-        <LinearLayout
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:paddingHorizontal="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_movie_rating"
+                android:id="@+id/tv_movie_title"
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="14sp"
-                android:text="5.8" />
+                android:layout_marginRight="50dp"
+                android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/img_wish_list"
-                android:layout_width="match_parent"
-                android:src="@drawable/ic_wish_list"
-                android:layout_height="50dp" />
-        </LinearLayout>
+            <LinearLayout
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_movie_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
 
-    <TextView
-        android:layout_marginHorizontal="10dp"
-        android:id="@+id/tv_movie_des"
+                <ImageView
+                    android:id="@+id/img_wish_list"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/ic_wish_list"
+                    android:layout_height="50dp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_marginHorizontal="10dp"
+            android:id="@+id/tv_movie_des"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pgLoadingView"
+        android:visibility="visible"
         android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content" />
+
+    <include
+        android:id="@+id/errorView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="13sp" />
-</LinearLayout>
+        android:visibility="gone"
+        layout="@layout/layout_error" />
+
+</RelativeLayout>

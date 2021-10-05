@@ -87,7 +87,6 @@ class HomeActivity : BaseActivity() {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
         }
-
         return true
     }
 
