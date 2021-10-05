@@ -24,9 +24,6 @@ import javax.inject.Inject
 
 class HomeActivity : BaseActivity() {
 
-//    @Inject
-//    lateinit var homeViewModel: HomeViewModel
-
     private lateinit var viewBinding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,8 +8,4 @@ import io.reactivex.Single
 
 class HomeViewModel(private val movieTaskRepository: IMovieTaskRepository) : ViewModel() {
 
-    fun working() {
-        Log.e("sss", "working---->")
-    }
-
 }
